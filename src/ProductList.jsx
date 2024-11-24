@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem} from './CartSlice';
+import { addItem } from './CartSlice';
 
 function ProductList() {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-    const [addedToCart, setAddedToCart] = useState({});
     const dispatch = useDispatch();
     const totalItems = useSelector((state) => state.cart.totalItems);
-    console.log(totalItems);
+    const addedToCart = useSelector(state => state.cart.addedToCart);
 
     const plantsArray = [
         {
@@ -243,12 +242,6 @@ function ProductList() {
     const handleAddToCart = (plant) => {
         // Dispatch the plant data to the Redux store
         dispatch(addItem(plant));
-
-        // Update the addedToCart state to reflect the product has been added
-        setAddedToCart((prevState) => ({
-            ...prevState,
-            [plant.name]: true, // Use plant name as the key and set its value to true
-        }));
     };
 
     const handleCartClick = (e) => {
@@ -306,7 +299,7 @@ function ProductList() {
                                         <button
                                             className="product-button"
                                             onClick={() => handleAddToCart(plant)}
-                                            disabled={addedToCart[plant.name]} // Disable button if already added
+                                            disabled={addedToCart[plant.name]}
                                             style={{
                                                 backgroundColor: addedToCart[plant.name] ? 'grey' : '#4CAF50',
                                                 cursor: addedToCart[plant.name] ? 'not-allowed' : 'pointer'
